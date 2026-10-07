@@ -1,0 +1,212 @@
+package com.muletool.model;
+
+import com.muletool.model.GlobalComponents.FieldDef;
+import com.muletool.model.GlobalComponents.FieldType;
+import java.util.*;
+import static com.muletool.model.GlobalComponents.Category;
+
+/**
+ * Defines all configurable activities available in flow XML files.
+ * Edit this class to add/remove/modify flow activity definitions.
+ */
+public class FlowComponents {
+
+    public static class ActivityDef {
+        public final String id;
+        public final String label;
+        public final String description;
+        public final String badge;
+        public final Category category;
+        public final List<FieldDef> fields;
+
+        public ActivityDef(String id, String label, String description, String badge,
+                           Category category, List<FieldDef> fields) {
+            this.id = id;
+            this.label = label;
+            this.description = description;
+            this.badge = badge;
+            this.category = category;
+            this.fields = fields;
+        }
+    }
+
+    // -----------------------------------------------------------------------
+    // All available flow activities
+    // -----------------------------------------------------------------------
+    public static List<ActivityDef> getAll() {
+        List<ActivityDef> list = new ArrayList<>();
+
+        // --- Flow definition ---
+        list.add(new ActivityDef(
+            "flow",
+            "Flow",
+            "Definizione di un flusso principale",
+            "FLW", Category.CONFIG,
+            Arrays.asList(
+                field("name",          "Flow Name",           "e.g. main-flow",         FieldType.TEXT,    null, true,  "Nome univoco del flusso"),
+                field("initialState",  "Initial State",       "",                        FieldType.COMBO,
+                    new String[]{"started","stopped"}, false, "Stato iniziale del flusso"),
+                field("maxConcurrency","Max Concurrency",     "1",                       FieldType.SPINNER, null, false, "Massima concorrenza (0 = illimitata)")
+            )
+        ));
+
+        // --- Sub Flow ---
+        list.add(new ActivityDef(
+            "sub_flow",
+            "Sub Flow",
+            "Sotto-flusso richiamabile tramite Flow Reference",
+            "SUB", Category.CONFIG,
+            Arrays.asList(
+                field("name", "Sub Flow Name", "e.g. common-error-handler-subflow", FieldType.TEXT, null, true, "Nome univoco del sub-flow")
+            )
+        ));
+
+        // --- HTTP Listener ---
+        list.add(new ActivityDef(
+            "http_listener",
+            "HTTP Listener",
+            "Sorgente HTTP: espone un endpoint REST",
+            "HTTP", Category.HTTP,
+            Arrays.asList(
+                field("configRef",       "Config Ref",         "HTTP_Listener_config",  FieldType.TEXT,  null, true,  "Riferimento alla HTTP Listener Config globale"),
+                field("path",            "Path",               "e.g. /orders/{id}",     FieldType.TEXT,  null, true,  "Percorso dell'endpoint (supporta URI template)"),
+                field("method",          "Allowed Methods",    "",                       FieldType.COMBO,
+                    new String[]{"GET","POST","PUT","PATCH","DELETE","GET,POST","ALL"}, false, "Metodi HTTP accettati"),
+                field("responseTimeout", "Response Streaming Mode","",                  FieldType.COMBO,
+                    new String[]{"AUTO","ALWAYS","NEVER"}, false, "Modalità streaming risposta"),
+                field("outputMimeType",  "Output MIME Type",   "application/json",       FieldType.TEXT,  null, false, "MIME type della risposta"),
+                field("displayName",     "Display Name",       "",                       FieldType.TEXT,  null, false, "Nome visualizzato nel canvas")
+            )
+        ));
+
+        // --- HTTP Request ---
+        list.add(new ActivityDef(
+            "http_request",
+            "HTTP Request",
+            "Chiamata HTTP verso un servizio esterno",
+            "REQ", Category.HTTP,
+            Arrays.asList(
+                field("configRef",      "Config Ref",      "HTTP_Request_config",    FieldType.TEXT,  null, true,  "Riferimento alla HTTP Request Config globale"),
+                field("method",         "Method",          "",                        FieldType.COMBO,
+                    new String[]{"GET","POST","PUT","PATCH","DELETE"}, true, "Metodo HTTP"),
+                field("path",           "Path",            "e.g. /users/{id}",        FieldType.TEXT,  null, true,  "Path relativo (si aggiunge al base path)"),
+                field("body",           "Body",            "e.g. payload",            FieldType.TEXTAREA, null, false, "Espressione DataWeave per il body"),
+                field("outputMimeType", "Output MIME Type","application/json",         FieldType.TEXT,  null, false, "MIME type atteso in risposta"),
+                field("followRedirects","Follow Redirects","",                         FieldType.CHECKBOX, null, false, "Segui redirect automaticamente"),
+                field("targetValue",    "Target Value",    "#[payload]",              FieldType.TEXT,  null, false, "Dove salvare il risultato"),
+                field("displayName",    "Display Name",    "",                         FieldType.TEXT,  null, false, "Nome visualizzato nel canvas")
+            )
+        ));
+
+        // --- Object Store Retrieve ---
+        list.add(new ActivityDef(
+            "os_retrieve",
+            "Object Store — Retrieve",
+            "Recupera un valore dall'Object Store",
+            "OS", Category.DATA,
+            Arrays.asList(
+                field("objectStoreRef", "Object Store Ref", "e.g. appObjectStore",  FieldType.TEXT,    null, true,  "Nome dell'Object Store globale"),
+                field("key",            "Key",              "e.g. #[vars.id]",       FieldType.TEXT,    null, true,  "Chiave da cercare (supporta DataWeave)"),
+                field("defaultValue",   "Default Value",    "",                       FieldType.TEXT,    null, false, "Valore di default se la chiave non esiste"),
+                field("targetVariable", "Target Variable",  "e.g. osResult",         FieldType.TEXT,    null, false, "Variabile Mule dove salvare il risultato"),
+                field("targetValue",    "Target Value",     "#[payload]",            FieldType.TEXT,    null, false, "Espressione target value"),
+                field("displayName",    "Display Name",     "",                       FieldType.TEXT,    null, false, "Nome visualizzato nel canvas")
+            )
+        ));
+
+        // --- Object Store Store ---
+        list.add(new ActivityDef(
+            "os_store",
+            "Object Store — Store",
+            "Salva un valore nell'Object Store",
+            "OS", Category.DATA,
+            Arrays.asList(
+                field("objectStoreRef", "Object Store Ref", "e.g. appObjectStore",  FieldType.TEXT,    null, true,  "Nome dell'Object Store globale"),
+                field("key",            "Key",              "e.g. #[vars.id]",       FieldType.TEXT,    null, true,  "Chiave di salvataggio"),
+                field("value",          "Value",            "e.g. #[payload]",       FieldType.TEXT,    null, true,  "Valore da salvare"),
+                field("failIfPresent",  "Fail If Present",  "",                       FieldType.CHECKBOX, null, false, "Fallisce se la chiave esiste già"),
+                field("displayName",    "Display Name",     "",                       FieldType.TEXT,    null, false, "Nome visualizzato nel canvas")
+            )
+        ));
+
+        // --- Object Store Remove ---
+        list.add(new ActivityDef(
+            "os_remove",
+            "Object Store — Remove",
+            "Rimuove una chiave dall'Object Store",
+            "OS", Category.DATA,
+            Arrays.asList(
+                field("objectStoreRef", "Object Store Ref", "e.g. appObjectStore",  FieldType.TEXT, null, true,  "Nome dell'Object Store globale"),
+                field("key",            "Key",              "e.g. #[vars.id]",       FieldType.TEXT, null, true,  "Chiave da eliminare"),
+                field("failIfAbsent",   "Fail If Absent",   "",                       FieldType.CHECKBOX, null, false, "Fallisce se la chiave non esiste"),
+                field("displayName",    "Display Name",     "",                       FieldType.TEXT, null, false, "Nome visualizzato nel canvas")
+            )
+        ));
+
+        // --- DB Select ---
+        list.add(new ActivityDef(
+            "db_select",
+            "Database — Select",
+            "Esegue una query SELECT sul database",
+            "DB", Category.DATA,
+            Arrays.asList(
+                field("configRef",      "Config Ref",       "Database_Config",       FieldType.TEXT,     null, true,  "Riferimento alla DB Config globale"),
+                field("sql",            "SQL Query",        "SELECT * FROM ...",     FieldType.TEXTAREA, null, true,  "Query SQL (usa :paramName per i parametri)"),
+                field("fetchSize",      "Fetch Size",       "10",                    FieldType.SPINNER,  null, false, "Numero di righe per fetch"),
+                field("maxRows",        "Max Rows",         "0",                     FieldType.SPINNER,  null, false, "Limite righe restituite (0 = illimitato)"),
+                field("targetVariable", "Target Variable",  "e.g. dbResult",         FieldType.TEXT,     null, false, "Variabile dove salvare il risultato"),
+                field("displayName",    "Display Name",     "",                       FieldType.TEXT,     null, false, "Nome visualizzato nel canvas")
+            )
+        ));
+
+        // --- DB Insert ---
+        list.add(new ActivityDef(
+            "db_insert",
+            "Database — Insert",
+            "Esegue un INSERT sul database",
+            "DB", Category.DATA,
+            Arrays.asList(
+                field("configRef",      "Config Ref",       "Database_Config",       FieldType.TEXT,     null, true,  "Riferimento alla DB Config globale"),
+                field("sql",            "SQL Statement",    "INSERT INTO ...",       FieldType.TEXTAREA, null, true,  "Statement SQL con parametri :paramName"),
+                field("targetVariable", "Target Variable",  "",                       FieldType.TEXT,     null, false, "Variabile per il risultato"),
+                field("displayName",    "Display Name",     "",                       FieldType.TEXT,     null, false, "Nome visualizzato nel canvas")
+            )
+        ));
+
+        // --- DB Update ---
+        list.add(new ActivityDef(
+            "db_update",
+            "Database — Update",
+            "Esegue un UPDATE sul database",
+            "DB", Category.DATA,
+            Arrays.asList(
+                field("configRef",      "Config Ref",       "Database_Config",       FieldType.TEXT,     null, true,  "Riferimento alla DB Config globale"),
+                field("sql",            "SQL Statement",    "UPDATE ... SET ...",    FieldType.TEXTAREA, null, true,  "Statement SQL con parametri :paramName"),
+                field("targetVariable", "Target Variable",  "",                       FieldType.TEXT,     null, false, "Variabile per il risultato"),
+                field("displayName",    "Display Name",     "",                       FieldType.TEXT,     null, false, "Nome visualizzato nel canvas")
+            )
+        ));
+
+        // --- DB Delete ---
+        list.add(new ActivityDef(
+            "db_delete",
+            "Database — Delete",
+            "Esegue un DELETE sul database",
+            "DB", Category.DATA,
+            Arrays.asList(
+                field("configRef",      "Config Ref",       "Database_Config",       FieldType.TEXT,     null, true,  "Riferimento alla DB Config globale"),
+                field("sql",            "SQL Statement",    "DELETE FROM ...",       FieldType.TEXTAREA, null, true,  "Statement SQL con parametri :paramName"),
+                field("targetVariable", "Target Variable",  "",                       FieldType.TEXT,     null, false, "Variabile per il risultato"),
+                field("displayName",    "Display Name",     "",                       FieldType.TEXT,     null, false, "Nome visualizzato nel canvas")
+            )
+        ));
+
+        return list;
+    }
+
+    private static FieldDef field(String key, String label, String placeholder,
+                                   FieldType type, String[] options,
+                                   boolean required, String tooltip) {
+        return new GlobalComponents.FieldDef(key, label, placeholder, type, options, required, tooltip);
+    }
+}

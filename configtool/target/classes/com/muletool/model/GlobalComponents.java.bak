@@ -1,0 +1,174 @@
+package com.muletool.model;
+
+import java.util.*;
+
+/**
+ * Defines all configurable properties/components available in global.xml.
+ * Edit this class to add/remove/modify global configuration items.
+ */
+public class GlobalComponents {
+
+    public enum Category { CONFIG, HTTP, DATA, SECURITY }
+
+    public static class ComponentDef {
+        public final String id;
+        public final String label;
+        public final String description;
+        public final String badge;
+        public final Category category;
+        public final List<FieldDef> fields;
+
+        public ComponentDef(String id, String label, String description, String badge,
+                            Category category, List<FieldDef> fields) {
+            this.id = id;
+            this.label = label;
+            this.description = description;
+            this.badge = badge;
+            this.category = category;
+            this.fields = fields;
+        }
+    }
+
+    public static class FieldDef {
+        public final String key;
+        public final String label;
+        public final String placeholder;
+        public final FieldType type;
+        public final String[] options;      // for COMBO
+        public final boolean required;
+        public final String tooltip;
+
+        public FieldDef(String key, String label, String placeholder,
+                        FieldType type, String[] options, boolean required, String tooltip) {
+            this.key = key;
+            this.label = label;
+            this.placeholder = placeholder;
+            this.type = type;
+            this.options = options;
+            this.required = required;
+            this.tooltip = tooltip;
+        }
+    }
+
+    public enum FieldType { TEXT, COMBO, PASSWORD, SPINNER, TEXTAREA, CHECKBOX }
+
+    // -----------------------------------------------------------------------
+    // All available global components
+    // -----------------------------------------------------------------------
+    public static List<ComponentDef> getAll() {
+        List<ComponentDef> list = new ArrayList<>();
+
+        // --- Configuration Properties ---
+        list.add(new ComponentDef(
+            "config_properties",
+            "Configuration Properties",
+            "Carica proprietà da file .yaml/.properties",
+            "CFG", Category.CONFIG,
+            Arrays.asList(
+                field("name",     "Config Name",  "e.g. appProperties",      FieldType.TEXT,  null, true,  "Nome del bean di configurazione"),
+                field("file",     "File Path",    "e.g. config-${env}.yaml", FieldType.TEXT,  null, true,  "Percorso del file properties (supporta placeholder)"),
+                field("encoding", "Encoding",     "UTF-8",                   FieldType.COMBO,
+                    new String[]{"UTF-8","ISO-8859-1","US-ASCII"}, false, "Encoding del file"),
+                field("secure",   "Secure File",  "",                        FieldType.CHECKBOX, null, false, "Abilita Secure Configuration Properties")
+            )
+        ));
+
+        // --- Global Properties ---
+        list.add(new ComponentDef(
+            "global_property",
+            "Global Property",
+            "Definisce variabili globali riutilizzabili",
+            "PROP", Category.CONFIG,
+            Arrays.asList(
+                field("name",  "Property Name",  "e.g. apiVersion",    FieldType.TEXT, null, true,  "Nome della proprietà globale"),
+                field("value", "Value",           "e.g. v1",            FieldType.TEXT, null, true,  "Valore della proprietà")
+            )
+        ));
+
+        // --- HTTP Listener Config ---
+        list.add(new ComponentDef(
+            "http_listener_config",
+            "HTTP Listener Config",
+            "Configurazione globale per HTTP Listener",
+            "HTTP", Category.HTTP,
+            Arrays.asList(
+                field("name",           "Config Name",    "e.g. HTTP_Listener_config",  FieldType.TEXT,    null, true,  "Nome della configurazione"),
+                field("host",           "Host",           "0.0.0.0",                    FieldType.TEXT,    null, true,  "Indirizzo di ascolto (0.0.0.0 per tutti)"),
+                field("port",           "Port",           "8081",                       FieldType.TEXT,    null, true,  "Porta di ascolto"),
+                field("basePath",       "Base Path",      "/api",                       FieldType.TEXT,    null, false, "Base path comune a tutti i listener"),
+                field("protocol",       "Protocol",       "",                            FieldType.COMBO,
+                    new String[]{"HTTP","HTTPS"}, false, "Protocollo"),
+                field("tlsContext",     "TLS Context Ref","",                            FieldType.TEXT,    null, false, "Riferimento al TLS context (solo HTTPS)"),
+                field("connectionIdle", "Connection Idle Timeout (ms)", "30000",         FieldType.SPINNER, null, false, "Timeout connessione idle")
+            )
+        ));
+
+        // --- HTTP Request Config ---
+        list.add(new ComponentDef(
+            "http_request_config",
+            "HTTP Request Config",
+            "Configurazione globale per HTTP Request (client)",
+            "REQ", Category.HTTP,
+            Arrays.asList(
+                field("name",             "Config Name",          "e.g. HTTP_Request_config",  FieldType.TEXT,  null, true,  "Nome della configurazione"),
+                field("host",             "Host",                 "e.g. api.example.com",      FieldType.TEXT,  null, true,  "Host del servizio remoto"),
+                field("port",             "Port",                 "443",                        FieldType.TEXT,  null, true,  "Porta del servizio remoto"),
+                field("protocol",         "Protocol",             "",                            FieldType.COMBO,
+                    new String[]{"HTTP","HTTPS"}, false, "Protocollo"),
+                field("basePath",         "Base Path",            "/api/v1",                    FieldType.TEXT,  null, false, "Base path comune a tutte le request"),
+                field("followRedirects",  "Follow Redirects",     "",                            FieldType.CHECKBOX, null, false, "Segui redirect HTTP automaticamente"),
+                field("sendBodyMode",     "Send Body Mode",       "",                            FieldType.COMBO,
+                    new String[]{"AUTO","ALWAYS","NEVER"}, false, "Modalità invio body"),
+                field("responseTimeout",  "Response Timeout (ms)","30000",                      FieldType.SPINNER, null, false, "Timeout risposta"),
+                field("proxy",            "Proxy Host",           "",                            FieldType.TEXT,  null, false, "Host proxy (opzionale)"),
+                field("proxyPort",        "Proxy Port",           "",                            FieldType.TEXT,  null, false, "Porta proxy (opzionale)")
+            )
+        ));
+
+        // --- Object Store Config ---
+        list.add(new ComponentDef(
+            "object_store",
+            "Object Store Config",
+            "Configurazione Object Store condiviso",
+            "OS", Category.DATA,
+            Arrays.asList(
+                field("name",           "Config Name",        "e.g. appObjectStore",  FieldType.TEXT,    null, true,  "Nome dell'object store"),
+                field("maxEntries",     "Max Entries",        "1000",                 FieldType.SPINNER, null, false, "Numero massimo di entry"),
+                field("entryTtl",       "Entry TTL (sec)",    "3600",                 FieldType.SPINNER, null, false, "Time-to-live delle entry in secondi"),
+                field("persistent",     "Persistent",         "",                     FieldType.CHECKBOX, null, false, "Persistente su disco"),
+                field("partitionName",  "Partition Name",     "e.g. myPartition",     FieldType.TEXT,    null, false, "Nome della partizione"),
+                field("expirationInterval","Expiration Interval (sec)","3600",        FieldType.SPINNER, null, false, "Intervallo di controllo scadenza")
+            )
+        ));
+
+        // --- Database Config ---
+        list.add(new ComponentDef(
+            "db_config",
+            "Database Config",
+            "Configurazione connessione al database",
+            "DB", Category.DATA,
+            Arrays.asList(
+                field("name",         "Config Name",   "e.g. Database_Config",     FieldType.TEXT,    null, true,  "Nome della configurazione DB"),
+                field("dbType",       "DB Type",       "",                          FieldType.COMBO,
+                    new String[]{"Oracle","MySQL","PostgreSQL","Microsoft SQL Server","Generic"}, true, "Tipo di database"),
+                field("host",         "Host",          "e.g. db.example.com",       FieldType.TEXT,    null, true,  "Host del database"),
+                field("port",         "Port",          "1521",                       FieldType.TEXT,    null, true,  "Porta del database"),
+                field("database",     "Database / SID","e.g. ORCL",                 FieldType.TEXT,    null, true,  "Nome del database o SID"),
+                field("user",         "Username",      "e.g. app_user",             FieldType.TEXT,    null, true,  "Utente del database"),
+                field("password",     "Password",      "",                           FieldType.PASSWORD, null, true, "Password del database"),
+                field("maxPoolSize",  "Max Pool Size", "10",                         FieldType.SPINNER, null, false, "Dimensione massima del connection pool"),
+                field("minPoolSize",  "Min Pool Size", "1",                          FieldType.SPINNER, null, false, "Dimensione minima del connection pool"),
+                field("connectionTimeout","Connection Timeout (sec)","30",           FieldType.SPINNER, null, false, "Timeout connessione al DB"),
+                field("driverClass",  "Driver Class",  "e.g. oracle.jdbc.OracleDriver", FieldType.TEXT, null, false, "Classe JDBC driver (solo Generic)")
+            )
+        ));
+
+        return list;
+    }
+
+    private static FieldDef field(String key, String label, String placeholder,
+                                   FieldType type, String[] options,
+                                   boolean required, String tooltip) {
+        return new FieldDef(key, label, placeholder, type, options, required, tooltip);
+    }
+}
