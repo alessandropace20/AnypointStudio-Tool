@@ -1,0 +1,376 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Integration Toolbox — Dark Theme (default)
+   Inspired by VS Code's dark theme interaction patterns.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Root / Background ─────────────────────────────────────────── */
+.root {
+    -fx-base: #1e1e1e;
+    -fx-background: #1e1e1e;
+    -fx-control-inner-background: #252526;
+    -fx-text-fill: #d4d4d4;
+    -fx-font-family: "Segoe UI", "Ubuntu", "Helvetica Neue", sans-serif;
+    -fx-font-size: 13px;
+    -fx-accent: #007acc;
+    -fx-focus-color: #007acc;
+    -fx-faint-focus-color: #007acc22;
+}
+
+/* ── Activity bar ──────────────────────────────────────────────── */
+.activity-bar {
+    -fx-background-color: #333333;
+    -fx-border-color: #252526;
+    -fx-border-width: 0 1 0 0;
+}
+
+.activity-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #cccccc;
+    -fx-alignment: center-left;
+    -fx-padding: 10 14;
+    -fx-border-width: 0;
+    -fx-font-size: 13px;
+}
+
+.activity-button:hover {
+    -fx-background-color: #2a2d2e;
+    -fx-text-fill: #ffffff;
+}
+
+.activity-button:focused {
+    -fx-background-color: #094771;
+    -fx-text-fill: #ffffff;
+    -fx-background-insets: 0;
+}
+
+/* ── Status bar ────────────────────────────────────────────────── */
+.status-bar {
+    -fx-background-color: #007acc;
+    -fx-padding: 2 8;
+}
+
+.status-label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+}
+
+/* ── Tab pane ──────────────────────────────────────────────────── */
+.tab-pane {
+    -fx-background-color: #1e1e1e;
+}
+
+.tab-pane .tab-header-area {
+    -fx-background-color: #2d2d30;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #2d2d30;
+}
+
+.tab {
+    -fx-background-color: #2d2d30;
+    -fx-background-radius: 0;
+    -fx-padding: 4 10;
+}
+
+.tab .tab-label {
+    -fx-text-fill: #969696;
+}
+
+.tab:selected {
+    -fx-background-color: #1e1e1e;
+}
+
+.tab:selected .tab-label {
+    -fx-text-fill: #d4d4d4;
+}
+
+.tab:hover .tab-label {
+    -fx-text-fill: #d4d4d4;
+}
+
+.tab .tab-close-button {
+    -fx-background-color: #969696;
+}
+
+/* ── Labels ────────────────────────────────────────────────────── */
+.label {
+    -fx-text-fill: #d4d4d4;
+}
+
+/* ── Text fields & areas ───────────────────────────────────────── */
+.text-field, .text-area, .password-field {
+    -fx-background-color: #3c3c3c;
+    -fx-text-fill: #d4d4d4;
+    -fx-prompt-text-fill: #5a5a5a;
+    -fx-border-color: #474747;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+}
+
+.text-field:focused, .text-area:focused, .password-field:focused {
+    -fx-border-color: #007acc;
+}
+
+.text-area .content {
+    -fx-background-color: #3c3c3c;
+}
+
+/* Code areas */
+.code-area {
+    -fx-font-family: "Consolas", "Cascadia Code", "Source Code Pro", "Courier New", monospace;
+    -fx-font-size: 13px;
+    -fx-background-color: #1e1e1e;
+    -fx-text-fill: #d4d4d4;
+    -fx-border-color: #474747;
+}
+
+.code-area .content {
+    -fx-background-color: #1e1e1e;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────── */
+.button {
+    -fx-background-color: #3a3d41;
+    -fx-text-fill: #d4d4d4;
+    -fx-border-color: #555;
+    -fx-border-radius: 2;
+    -fx-background-radius: 2;
+    -fx-padding: 4 12;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #4e5257;
+    -fx-border-color: #007acc;
+}
+
+.button:pressed {
+    -fx-background-color: #094771;
+}
+
+.button:focused {
+    -fx-border-color: #007acc;
+}
+
+/* Primary action buttons */
+.button.primary {
+    -fx-background-color: #007acc;
+    -fx-text-fill: #ffffff;
+    -fx-border-color: #007acc;
+}
+
+.button.primary:hover {
+    -fx-background-color: #0062a3;
+}
+
+/* ── Toggle buttons ────────────────────────────────────────────── */
+.toggle-button {
+    -fx-background-color: #3a3d41;
+    -fx-text-fill: #d4d4d4;
+    -fx-border-color: #555;
+    -fx-border-radius: 2;
+    -fx-padding: 4 8;
+}
+
+.toggle-button:selected {
+    -fx-background-color: #094771;
+    -fx-border-color: #007acc;
+}
+
+/* ── Radio / check boxes ────────────────────────────────────────── */
+.radio-button .text, .check-box .text {
+    -fx-text-fill: #d4d4d4;
+}
+
+.radio-button:selected .dot {
+    -fx-background-color: #007acc;
+}
+
+/* ── ComboBox ───────────────────────────────────────────────────── */
+.combo-box {
+    -fx-background-color: #3c3c3c;
+    -fx-text-fill: #d4d4d4;
+    -fx-border-color: #474747;
+    -fx-border-radius: 2;
+}
+
+.combo-box:hover {
+    -fx-border-color: #007acc;
+}
+
+.combo-box .cell {
+    -fx-text-fill: #d4d4d4;
+    -fx-background-color: #3c3c3c;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #3c3c3c;
+    -fx-border-color: #474747;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-text-fill: #d4d4d4;
+    -fx-background-color: #3c3c3c;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: #2a2d2e;
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: #094771;
+}
+
+/* ── ListView ───────────────────────────────────────────────────── */
+.list-view {
+    -fx-background-color: #252526;
+    -fx-border-color: #474747;
+    -fx-border-radius: 2;
+}
+
+.list-cell {
+    -fx-background-color: #252526;
+    -fx-text-fill: #d4d4d4;
+    -fx-padding: 4 8;
+}
+
+.list-cell:hover {
+    -fx-background-color: #2a2d2e;
+}
+
+.list-cell:selected {
+    -fx-background-color: #094771;
+    -fx-text-fill: #ffffff;
+}
+
+/* ── ScrollPane ─────────────────────────────────────────────────── */
+.scroll-pane {
+    -fx-background-color: #1e1e1e;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: #1e1e1e;
+}
+
+.scroll-bar {
+    -fx-background-color: #2d2d30;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #555;
+    -fx-background-radius: 3;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: #777;
+}
+
+/* ── SplitPane ──────────────────────────────────────────────────── */
+.split-pane {
+    -fx-background-color: #1e1e1e;
+    -fx-padding: 0;
+}
+
+.split-pane-divider {
+    -fx-background-color: #474747;
+    -fx-padding: 0 1;
+}
+
+/* ── Toolbar / toolbar area ────────────────────────────────────── */
+.tool-bar {
+    -fx-background-color: #2d2d30;
+    -fx-border-color: #474747;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 4 8;
+}
+
+/* ── Separator ──────────────────────────────────────────────────── */
+.separator .line {
+    -fx-border-color: #474747;
+    -fx-border-width: 1 0 0 0;
+}
+
+/* ── Dialogs / alerts ───────────────────────────────────────────── */
+.dialog-pane {
+    -fx-background-color: #252526;
+    -fx-border-color: #474747;
+}
+
+.dialog-pane .header-panel {
+    -fx-background-color: #2d2d30;
+}
+
+.dialog-pane .header-panel .label {
+    -fx-text-fill: #d4d4d4;
+}
+
+.dialog-pane .content {
+    -fx-text-fill: #d4d4d4;
+}
+
+/* ── Tooltip ────────────────────────────────────────────────────── */
+.tooltip {
+    -fx-background-color: #252526;
+    -fx-text-fill: #d4d4d4;
+    -fx-border-color: #474747;
+}
+
+/* ── GridPane labels ────────────────────────────────────────────── */
+.panel-root {
+    -fx-background-color: #1e1e1e;
+}
+
+/* ── Welcome screen ─────────────────────────────────────────────── */
+.welcome-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #d4d4d4;
+}
+
+.welcome-subtitle {
+    -fx-font-size: 14px;
+    -fx-text-fill: #888;
+}
+
+.welcome-hint {
+    -fx-font-size: 13px;
+    -fx-text-fill: #cccccc;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* ── Warning label ──────────────────────────────────────────────── */
+.warning-label {
+    -fx-text-fill: #ce9178;
+    -fx-font-size: 12px;
+    -fx-padding: 2 8;
+}
+
+/* ── Status inline label ────────────────────────────────────────── */
+.status-inline {
+    -fx-font-size: 12px;
+    -fx-text-fill: #4ec9b0;
+}
+
+/* ── Settings ───────────────────────────────────────────────────── */
+.settings-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #d4d4d4;
+}
+
+.version-label {
+    -fx-text-fill: #555;
+    -fx-font-size: 11px;
+}
+
+.privacy-note {
+    -fx-text-fill: #888;
+    -fx-font-size: 12px;
+}
+
+.shortcut-key {
+    -fx-font-family: "Consolas", monospace;
+    -fx-font-size: 12px;
+    -fx-text-fill: #9cdcfe;
+}
